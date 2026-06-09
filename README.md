@@ -7,6 +7,7 @@
 ##  Project Overview
 
 This project is a full Linux server deployment for **PromisedLand.com's** new secondary data center in Independence, Missouri. The facility houses **38 employees** across four departments and serves as the IT secondary data center supporting hybrid call centers across the United States and Canada.
+<img width="1064" height="668" alt="image" src="https://github.com/user-attachments/assets/323e4ce7-e573-4dc9-8df1-e17b46f7c821" />
 
 **Organizational Structure:**
 -  **Carrie Shumaker** — CIO/Director
