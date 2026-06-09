@@ -40,11 +40,6 @@ Launched an Ubuntu Server 22.04 LTS EC2 instance on AWS with a 120 GB EBS volume
 ```bash
 ssh -i "njabs.key.pem" ubuntu@18.236.212.245
 ```
-
-<!-- SCREENSHOT: AWS Console showing EC2 instance in running state -->
-
-<!-- SCREENSHOT: Terminal showing successful SSH connection + MOTD -->
-
 ---
 
 ##  Step 2 — System Update
@@ -55,10 +50,6 @@ Updated all repositories and packages to ensure the server is current and secure
 sudo apt update
 sudo apt upgrade -y
 ```
-
-<!-- SCREENSHOT: Terminal showing apt update && apt upgrade output -->
-![System Update](screenshots/03_apt_update.png)
-
 ---
 
 ##  Step 3 — Disk Partitioning & Mounting
@@ -91,14 +82,6 @@ df -h
 free -h
 ```
 
-<!-- SCREENSHOT: lsblk output showing all partitions -->
-
-<!-- SCREENSHOT: df -h output showing mounted partitions -->
-
-<!-- SCREENSHOT: free -h output showing 4G swap active -->
-
----
-
 ##  Step 4 — Groups
 
 Created department groups and sub-groups mapped directly to the organizational chart:
@@ -121,10 +104,6 @@ sudo groupadd CRM_intern
 sudo groupadd finance
 sudo groupadd executive
 ```
-
-<!-- SCREENSHOT: cat /etc/group output showing all groups -->
-![Groups](screenshots/07_groups.png)
-
 ---
 
 ## Step 5 — User Accounts
@@ -147,10 +126,6 @@ sudo usermod -L Brian_Hoang
 # Set temp account expiry
 sudo chage -E 2025-12-31 Evan_Casement
 ```
-
-<!-- SCREENSHOT: cat /etc/passwd output showing all users with /bin/bash -->
-![User Accounts](screenshots/08_users.png)
-
 ---
 
 ## Step 6 — Sudo Access
@@ -161,9 +136,6 @@ Restricted sudo access to the Infrastructure Team only via `/etc/sudoers`:
 sudo visudo
 # Added: %it_admin   ALL=(ALL:ALL) ALL
 ```
-
-<!-- SCREENSHOT: sudoers entry showing it_admin group -->
-![Sudo Config](screenshots/09_sudo.png)
 
 ---
 
@@ -188,10 +160,6 @@ sudo chown root:operations   /srv/shares/common       && sudo chmod 2775 /srv/sh
 - `2770` — Group members only (no outside access); setgid active
 - `2775` — All authenticated staff can read/write (common folder)
 - `s` in group position = setgid bit (new files inherit group automatically)
-
-<!-- SCREENSHOT: ls -la /srv/shares/ showing all directories and permissions -->
-![Shared Directories](screenshots/10_shares.png)
-
 ---
 
 ##  Step 8 — ACLs (Access Control Lists)
@@ -211,13 +179,6 @@ sudo setfacl -m u:Sherie_Modelski:rx /srv/shares/infrastructure
 ```bash
 sudo getfacl /srv/shares/finance
 ```
-
-<!-- SCREENSHOT: getfacl /srv/shares/finance showing Carrie's r-x ACL entry -->
-![ACL Finance](screenshots/11_acl_finance.png)
-
-<!-- SCREENSHOT: getfacl /srv/shares/operations showing Carrie's r-x ACL entry -->
-![ACL Operations](screenshots/12_acl_operations.png)
-
 ---
 
 ##  Step 9 — Samba File Server
@@ -244,9 +205,6 @@ sudo systemctl enable smbd
 sudo systemctl start smbd
 ```
 
-<!-- SCREENSHOT: systemctl status smbd showing active (running) -->
-![Samba Status](screenshots/13_samba_status.png)
-
 ---
 
 ##  Step 10 — Firewall (UFW)
@@ -261,9 +219,6 @@ sudo ufw allow samba
 sudo ufw enable
 sudo ufw status verbose
 ```
-
-<!-- SCREENSHOT: ufw status verbose showing all rules -->
-![UFW Firewall](screenshots/14_ufw_status.png)
 
 ---
 
@@ -281,11 +236,6 @@ sudo systemctl restart ssh
 sudo grep -E "PermitRootLogin|PasswordAuthentication" /etc/ssh/sshd_config
 ```
 
-<!-- SCREENSHOT: grep output showing PermitRootLogin no and PasswordAuthentication no -->
-![SSH Hardening](screenshots/15_ssh_hardening.png)
-
----
-
 ##  Step 12 — Message of the Day (MOTD)
 
 Configured a custom MOTD displayed at every login:
@@ -301,10 +251,6 @@ Configured a custom MOTD displayed at every login:
 *   Infrastructure Manager: Joseph Lubomirski                     *
 *******************************************************************
 ```
-
-<!-- SCREENSHOT: cat /etc/motd showing the full MOTD -->
-![MOTD](screenshots/16_motd.png)
-
 ---
 
 ##  Step 13 — Scheduled Reboot (Cron)
@@ -323,10 +269,6 @@ sudo nano /etc/cron.d/scheduled_reboot
 cat /etc/cron.d/scheduled_reboot
 sudo systemctl status cron
 ```
-
-<!-- SCREENSHOT: cat /etc/cron.d/scheduled_reboot showing the entry -->
-![Cron Job](screenshots/17_cron.png)
-
 ---
 
 ##  Step 14 — CLI Package Installation (tree)
@@ -337,9 +279,6 @@ Installed `tree` — a non-default command-line utility for visualizing director
 sudo apt install tree -y
 tree /srv/shares/
 ```
-
-<!-- SCREENSHOT: tree /srv/shares/ showing full directory structure -->
-![Tree Output](screenshots/18_tree.png)
 
 ---
 
@@ -357,41 +296,6 @@ cat /etc/motd
 cat /etc/cron.d/scheduled_reboot
 tree /srv/shares/
 ```
-
-<!-- SCREENSHOT: Full verification output -->
-![Final Verification](screenshots/19_verification.png)
-
----
-
-##  Repository Structure
-
-```
-IT210-Linux-Deployment/
-├── README.md               ← This file
-├── screenshots/            ← All verification screenshots
-│   ├── 01_ec2_instance.png
-│   ├── 02_ssh_connection.png
-│   ├── 03_apt_update.png
-│   ├── 04_lsblk.png
-│   ├── 05_df_h.png
-│   ├── 06_free_h.png
-│   ├── 07_groups.png
-│   ├── 08_users.png
-│   ├── 09_sudo.png
-│   ├── 10_shares.png
-│   ├── 11_acl_finance.png
-│   ├── 12_acl_operations.png
-│   ├── 13_samba_status.png
-│   ├── 14_ufw_status.png
-│   ├── 15_ssh_hardening.png
-│   ├── 16_motd.png
-│   ├── 17_cron.png
-│   ├── 18_tree.png
-│   └── 19_verification.png
-├── PromisedLand_Deployment_Proposal.docx  ← Written proposal
-└── Video_Script.md         ← Video demo script
-```
-
 ---
 
 ##  Course Outcomes Met
@@ -404,4 +308,4 @@ IT210-Linux-Deployment/
 
 ---
 
-*IT 210 – Linux Administration | BYU Pathway Worldwide | Njabulo Thusi*
+*IT 210 – Linux Administration | BYU Pathway Worldwide | Njabulo P Tshuma*
