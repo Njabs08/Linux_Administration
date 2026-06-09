@@ -1,24 +1,24 @@
-# 🖥️ PromisedLand.com – Linux Server Deployment
+#  PromisedLand.com – Linux Server Deployment
 ### IT 210 | Linux Administration | Final Project
 **AWS EC2 | Ubuntu Server 22.04 LTS | Samba | UFW | ACLs | Cron**
 
 ---
 
-## 📋 Project Overview
+##  Project Overview
 
 This project is a full Linux server deployment for **PromisedLand.com's** new secondary data center in Independence, Missouri. The facility houses **38 employees** across four departments and serves as the IT secondary data center supporting hybrid call centers across the United States and Canada.
 
 **Organizational Structure:**
-- 👤 **Carrie Shumaker** — CIO/Director
-- 💰 **Linda McLachlan** — Director of Finance
-- ⚙️ **Richard Durant** — Operations Manager
-- 💻 **Brian LaGoe** — Business Applications Manager
-- 🔧 **Joseph Lubomirski** — Infrastructure Manager
-- 📞 **Cole Motley** — CRM Solution Architect
+-  **Carrie Shumaker** — CIO/Director
+-  **Linda McLachlan** — Director of Finance
+-  **Richard Durant** — Operations Manager
+-  **Brian LaGoe** — Business Applications Manager
+-  **Joseph Lubomirski** — Infrastructure Manager
+-  **Cole Motley** — CRM Solution Architect
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 | Tool | Purpose |
 |---|---|
@@ -32,7 +32,7 @@ This project is a full Linux server deployment for **PromisedLand.com's** new se
 
 ---
 
-## 🚀 Step 1 — AWS EC2 Instance Launch & Access
+##  Step 1 — AWS EC2 Instance Launch & Access
 
 Launched an Ubuntu Server 22.04 LTS EC2 instance on AWS with a 120 GB EBS volume attached as a secondary disk.
 
@@ -41,14 +41,12 @@ ssh -i "njabs.key.pem" ubuntu@18.236.212.245
 ```
 
 <!-- SCREENSHOT: AWS Console showing EC2 instance in running state -->
-![AWS EC2 Instance](screenshots/01_ec2_instance.png)
 
 <!-- SCREENSHOT: Terminal showing successful SSH connection + MOTD -->
-![SSH Connection](screenshots/02_ssh_connection.png)
 
 ---
 
-## 📦 Step 2 — System Update
+##  Step 2 — System Update
 
 Updated all repositories and packages to ensure the server is current and secure.
 
@@ -62,7 +60,7 @@ sudo apt upgrade -y
 
 ---
 
-## 💾 Step 3 — Disk Partitioning & Mounting
+##  Step 3 — Disk Partitioning & Mounting
 
 Partitioned the 120 GB EBS volume (`/dev/nvme1n1`) into 5 dedicated sections:
 
@@ -93,17 +91,14 @@ free -h
 ```
 
 <!-- SCREENSHOT: lsblk output showing all partitions -->
-![lsblk Output](screenshots/04_lsblk.png)
 
 <!-- SCREENSHOT: df -h output showing mounted partitions -->
-![df -h Output](screenshots/05_df_h.png)
 
 <!-- SCREENSHOT: free -h output showing 4G swap active -->
-![free -h Output](screenshots/06_free_h.png)
 
 ---
 
-## 👥 Step 4 — Groups
+##  Step 4 — Groups
 
 Created department groups and sub-groups mapped directly to the organizational chart:
 
@@ -131,7 +126,7 @@ sudo groupadd executive
 
 ---
 
-## 👤 Step 5 — User Accounts
+## Step 5 — User Accounts
 
 Created all 35 user accounts with `/bin/bash` shell, home directories, and forced password change on first login.
 
@@ -157,7 +152,7 @@ sudo chage -E 2025-12-31 Evan_Casement
 
 ---
 
-## 🔐 Step 6 — Sudo Access
+## Step 6 — Sudo Access
 
 Restricted sudo access to the Infrastructure Team only via `/etc/sudoers`:
 
@@ -171,7 +166,7 @@ sudo visudo
 
 ---
 
-## 📁 Step 7 — Shared Directories & Permissions
+##  Step 7 — Shared Directories & Permissions
 
 Created 10 departmental share directories under `/srv/shares/` with setgid permissions:
 
@@ -198,7 +193,7 @@ sudo chown root:operations   /srv/shares/common       && sudo chmod 2775 /srv/sh
 
 ---
 
-## 🔑 Step 8 — ACLs (Access Control Lists)
+##  Step 8 — ACLs (Access Control Lists)
 
 Granted Carrie Shumaker (CIO/Director) read-only access to all department shares for organizational oversight, without full group membership:
 
@@ -224,7 +219,7 @@ sudo getfacl /srv/shares/finance
 
 ---
 
-## 🗂️ Step 9 — Samba File Server
+##  Step 9 — Samba File Server
 
 Installed and configured Samba for cross-platform file sharing across all departments:
 
@@ -253,7 +248,7 @@ sudo systemctl start smbd
 
 ---
 
-## 🔥 Step 10 — Firewall (UFW)
+##  Step 10 — Firewall (UFW)
 
 Configured UFW with default-deny inbound policy, allowing only SSH and Samba:
 
@@ -271,7 +266,7 @@ sudo ufw status verbose
 
 ---
 
-## 🔒 Step 11 — SSH Hardening
+##  Step 11 — SSH Hardening
 
 Disabled root login and password authentication in `/etc/ssh/sshd_config`:
 
@@ -290,7 +285,7 @@ sudo grep -E "PermitRootLogin|PasswordAuthentication" /etc/ssh/sshd_config
 
 ---
 
-## 📢 Step 12 — Message of the Day (MOTD)
+##  Step 12 — Message of the Day (MOTD)
 
 Configured a custom MOTD displayed at every login:
 
@@ -311,7 +306,7 @@ Configured a custom MOTD displayed at every login:
 
 ---
 
-## ⏰ Step 13 — Scheduled Reboot (Cron)
+##  Step 13 — Scheduled Reboot (Cron)
 
 Configured a cron job to reboot the server every two years at 2:00 AM on January 1st:
 
@@ -333,7 +328,7 @@ sudo systemctl status cron
 
 ---
 
-## 📦 Step 14 — CLI Package Installation (tree)
+##  Step 14 — CLI Package Installation (tree)
 
 Installed `tree` — a non-default command-line utility for visualizing directory structures:
 
@@ -347,7 +342,7 @@ tree /srv/shares/
 
 ---
 
-## ✅ Final Verification
+##  Final Verification
 
 ```bash
 lsblk && df -h && free -h
@@ -367,7 +362,7 @@ tree /srv/shares/
 
 ---
 
-## 📂 Repository Structure
+##  Repository Structure
 
 ```
 IT210-Linux-Deployment/
@@ -398,7 +393,7 @@ IT210-Linux-Deployment/
 
 ---
 
-## 🎓 Course Outcomes Met
+##  Course Outcomes Met
 
 | Outcome | Description | Demonstrated By |
 |---|---|---|
